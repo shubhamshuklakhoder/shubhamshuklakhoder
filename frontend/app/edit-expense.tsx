@@ -31,20 +31,23 @@ export default function EditExpenseScreen() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
-    if (id) {
-      const loadedExpense = storageService.getExpenseById(id);
-      if (loadedExpense) {
-        setExpense(loadedExpense);
-        setTitle(loadedExpense.title);
-        setAmount(loadedExpense.amount.toString());
-        setCategory(loadedExpense.category);
-        setDate(loadedExpense.date);
-      } else {
-        Alert.alert('Error', 'Expense not found', [
-          { text: 'OK', onPress: () => router.back() },
-        ]);
+    const loadExpense = async () => {
+      if (id) {
+        const loadedExpense = await storageService.getExpenseById(id);
+        if (loadedExpense) {
+          setExpense(loadedExpense);
+          setTitle(loadedExpense.title);
+          setAmount(loadedExpense.amount.toString());
+          setCategory(loadedExpense.category);
+          setDate(loadedExpense.date);
+        } else {
+          Alert.alert('Error', 'Expense not found', [
+            { text: 'OK', onPress: () => router.back() },
+          ]);
+        }
       }
-    }
+    };
+    loadExpense();
   }, [id]);
 
   const handleUpdate = () => {
