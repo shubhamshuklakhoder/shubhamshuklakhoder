@@ -12,9 +12,12 @@ import {
   Platform,
   Alert,
   Modal,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import { storageService, Expense } from '../utils/storage';
 import { CATEGORIES, CategoryValue } from '../constants/categories';
 import { format } from 'date-fns';
