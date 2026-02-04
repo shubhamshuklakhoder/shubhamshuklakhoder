@@ -1,6 +1,4 @@
-import { MMKV } from 'react-native-mmkv';
-
-export const storage = new MMKV();
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface Expense {
   id: string;
@@ -11,13 +9,13 @@ export interface Expense {
   createdAt: string;
 }
 
-const EXPENSES_KEY = 'expenses';
+const EXPENSES_KEY = '@expenses';
 
 export const storageService = {
   // Get all expenses
-  getExpenses: (): Expense[] => {
+  getExpenses: async (): Promise<Expense[]> => {
     try {
-      const data = storage.getString(EXPENSES_KEY);
+      const data = await AsyncStorage.getItem(EXPENSES_KEY);
       return data ? JSON.parse(data) : [];
     } catch (error) {
       console.error('Error getting expenses:', error);
@@ -26,16 +24,16 @@ export const storageService = {
   },
 
   // Save a new expense
-  saveExpense: (expense: Omit<Expense, 'id' | 'createdAt'>): Expense => {
+  saveExpense: async (expense: Omit<Expense, 'id' | 'createdAt'>): Promise<Expense> => {
     try {
-      const expenses = storageService.getExpenses();
+      const expenses = await storageService.getExpenses();
       const newExpense: Expense = {
         ...expense,
         id: Date.now().toString(),
         createdAt: new Date().toISOString(),
       };
       expenses.push(newExpense);
-      storage.set(EXPENSES_KEY, JSON.stringify(expenses));
+      await AsyncStorage.setItem(EXPENSES_KEY, JSON.stringify(expenses));
       return newExpense;
     } catch (error) {
       console.error('Error saving expense:', error);
@@ -44,13 +42,13 @@ export const storageService = {
   },
 
   // Update an existing expense
-  updateExpense: (id: string, updates: Partial<Omit<Expense, 'id' | 'createdAt'>>): void => {
+  updateExpense: async (id: string, updates: Partial<Omit<Expense, 'id' | 'createdAt'>>): Promise<void> => {
     try {
-      const expenses = storageService.getExpenses();
+      const expenses = await storageService.getExpenses();
       const index = expenses.findIndex(exp => exp.id === id);
       if (index !== -1) {
         expenses[index] = { ...expenses[index], ...updates };
-        storage.set(EXPENSES_KEY, JSON.stringify(expenses));
+        await AsyncStorage.setItem(EXPENSES_KEY, JSON.stringify(expenses));
       }
     } catch (error) {
       console.error('Error updating expense:', error);
@@ -59,11 +57,11 @@ export const storageService = {
   },
 
   // Delete an expense
-  deleteExpense: (id: string): void => {
+  deleteExpense: async (id: string): Promise<void> => {
     try {
-      const expenses = storageService.getExpenses();
+      const expenses = await storageService.getExpenses();
       const filtered = expenses.filter(exp => exp.id !== id);
-      storage.set(EXPENSES_KEY, JSON.stringify(filtered));
+      await AsyncStorage.setItem(EXPENSES_KEY, JSON.stringify(filtered));
     } catch (error) {
       console.error('Error deleting expense:', error);
       throw error;
@@ -71,9 +69,9 @@ export const storageService = {
   },
 
   // Get expense by ID
-  getExpenseById: (id: string): Expense | undefined => {
+  getExpenseById: async (id: string): Promise<Expense | undefined> => {
     try {
-      const expenses = storageService.getExpenses();
+      const expenses = await storageService.getExpenses();
       return expenses.find(exp => exp.id === id);
     } catch (error) {
       console.error('Error getting expense by ID:', error);
