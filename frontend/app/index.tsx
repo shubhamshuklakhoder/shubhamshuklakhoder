@@ -8,13 +8,18 @@ import {
   SafeAreaView,
   StatusBar,
   RefreshControl,
+  Platform,
+  Dimensions,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { storageService, Expense } from '../utils/storage';
 import { formatExpenseDate, formatCurrency } from '../utils/dateUtils';
 import { CATEGORIES } from '../constants/categories';
 import { startOfDay, startOfWeek, startOfMonth, parseISO } from 'date-fns';
+
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 type TimeFilter = 'today' | 'week' | 'month';
 
