@@ -69,6 +69,9 @@ export default function EditExpenseScreen() {
     }
 
     try {
+      // Haptic feedback
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      
       await storageService.updateExpense(expense.id, {
         title: title.trim(),
         amount: numAmount,
@@ -88,7 +91,8 @@ export default function EditExpenseScreen() {
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setShowDeleteModal(true);
   };
 
