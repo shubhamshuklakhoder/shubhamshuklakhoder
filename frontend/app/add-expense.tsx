@@ -25,7 +25,7 @@ export default function AddExpenseScreen() {
   const [category, setCategory] = useState<CategoryValue>('Other');
   const [date, setDate] = useState(new Date().toISOString());
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // Validation
     if (!title.trim()) {
       Alert.alert('Error', 'Please enter a title');
@@ -39,7 +39,7 @@ export default function AddExpenseScreen() {
     }
 
     try {
-      storageService.saveExpense({
+      await storageService.saveExpense({
         title: title.trim(),
         amount: numAmount,
         category,
