@@ -270,7 +270,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: 16,
-    paddingBottom: 120, // Extra space for FAB
   },
   listContainerEmpty: {
     flex: 1,
