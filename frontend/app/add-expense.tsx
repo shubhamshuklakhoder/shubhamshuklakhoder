@@ -42,6 +42,9 @@ export default function AddExpenseScreen() {
     }
 
     try {
+      // Haptic feedback on save
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      
       await storageService.saveExpense({
         title: title.trim(),
         amount: numAmount,
