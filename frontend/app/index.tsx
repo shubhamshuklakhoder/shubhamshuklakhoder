@@ -187,13 +187,13 @@ export default function HomeScreen() {
 
       {/* Floating Add Button */}
       <TouchableOpacity
-        style={styles.fab}
+        style={[styles.fab, { bottom: Math.max(insets.bottom + 20, 20) }]}
         onPress={() => router.push('/add-expense')}
         activeOpacity={0.8}
       >
         <Ionicons name="add" size={32} color="#FFFFFF" />
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 }
 
