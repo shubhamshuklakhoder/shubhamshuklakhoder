@@ -177,17 +177,25 @@ export default function HomeScreen() {
         keyExtractor={item => item.id}
         contentContainerStyle={[
           styles.listContainer,
+          { paddingBottom: insets.bottom + 100 }, // Dynamic padding based on safe area
           filteredExpenses.length === 0 && styles.listContainerEmpty,
         ]}
         ListEmptyComponent={renderEmptyState}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        showsVerticalScrollIndicator={true}
       />
 
       {/* Floating Add Button */}
       <TouchableOpacity
-        style={[styles.fab, { bottom: Math.max(insets.bottom + 20, 20) }]}
+        style={[
+          styles.fab,
+          { 
+            bottom: insets.bottom > 0 ? insets.bottom + 16 : 24,
+            right: 20,
+          }
+        ]}
         onPress={() => router.push('/add-expense')}
         activeOpacity={0.8}
       >
