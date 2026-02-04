@@ -11,9 +11,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import { storageService } from '../utils/storage';
 import { CATEGORIES, CategoryValue } from '../constants/categories';
 import { format } from 'date-fns';
