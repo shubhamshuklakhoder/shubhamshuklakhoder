@@ -89,11 +89,11 @@ export default function EditExpenseScreen() {
     setShowDeleteModal(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!expense) return;
 
     try {
-      storageService.deleteExpense(expense.id);
+      await storageService.deleteExpense(expense.id);
       setShowDeleteModal(false);
       Alert.alert('Success', 'Expense deleted successfully', [
         {
