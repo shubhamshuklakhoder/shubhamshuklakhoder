@@ -100,6 +100,9 @@ export default function EditExpenseScreen() {
     if (!expense) return;
 
     try {
+      // Strong haptic feedback for destructive action
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      
       await storageService.deleteExpense(expense.id);
       setShowDeleteModal(false);
       Alert.alert('Success', 'Expense deleted successfully', [
