@@ -25,6 +25,7 @@ type TimeFilter = 'today' | 'week' | 'month';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [timeFilter, setTimeFilter] = useState<TimeFilter>('month');
   const [refreshing, setRefreshing] = useState(false);
