@@ -24,8 +24,8 @@ export default function HomeScreen() {
   const [timeFilter, setTimeFilter] = useState<TimeFilter>('month');
   const [refreshing, setRefreshing] = useState(false);
 
-  const loadExpenses = () => {
-    const allExpenses = storageService.getExpenses();
+  const loadExpenses = async () => {
+    const allExpenses = await storageService.getExpenses();
     // Sort by date descending (latest first)
     const sorted = allExpenses.sort((a, b) => 
       new Date(b.date).getTime() - new Date(a.date).getTime()
