@@ -234,7 +234,8 @@ export default function EditExpenseScreen() {
               {format(new Date(date), 'EEEE, dd MMMM yyyy')}
             </Text>
           </View>
-        </ScrollView>
+          </ScrollView>
+        </TouchableWithoutFeedback>
 
         {/* Update Button */}
         <View style={styles.footer}>
