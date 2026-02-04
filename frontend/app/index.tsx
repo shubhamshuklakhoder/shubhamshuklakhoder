@@ -126,7 +126,7 @@ export default function HomeScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
       
       {/* Header */}
