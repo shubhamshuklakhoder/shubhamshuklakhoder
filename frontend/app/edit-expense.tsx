@@ -50,7 +50,7 @@ export default function EditExpenseScreen() {
     loadExpense();
   }, [id]);
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (!expense) return;
 
     // Validation
@@ -66,7 +66,7 @@ export default function EditExpenseScreen() {
     }
 
     try {
-      storageService.updateExpense(expense.id, {
+      await storageService.updateExpense(expense.id, {
         title: title.trim(),
         amount: numAmount,
         category,
