@@ -45,9 +45,9 @@ export default function HomeScreen() {
     return unsubscribe;
   }, [router]);
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-    loadExpenses();
+    await loadExpenses();
     setRefreshing(false);
   };
 
