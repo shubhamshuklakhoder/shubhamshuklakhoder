@@ -1,0 +1,134 @@
+{
+  "identity": {
+    "persona": "E1",
+    "philosophy": "The Digital Press - Swiss Utility. Absolute clarity, tactile precision, zero fluff.",
+    "principles": [
+      "Fusion: Digital speed meets Analog paper tactile feel.",
+      "Emotion: Trust through precision.",
+      "Content: The user's files are the hero.",
+      "Negative Space: Radical emptiness to focus attention.",
+      "Contrast: Sharp black on white. No gray zones."
+    ]
+  },
+  "typography": {
+    "font_family": {
+      "headings": "IBM Plex Sans, sans-serif",
+      "body": "Inter, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "weights": {
+      "headings": "600",
+      "body": "400",
+      "bold": "600"
+    },
+    "sizes": {
+      "h1": "text-4xl md:text-5xl tracking-tight",
+      "h2": "text-2xl md:text-3xl tracking-tight",
+      "body": "text-base leading-relaxed",
+      "small": "text-sm text-muted-foreground"
+    }
+  },
+  "colors": {
+    "palette": {
+      "background": "#FFFFFF",
+      "foreground": "#0A0A0A",
+      "primary": "#2563EB",
+      "primary_foreground": "#FFFFFF",
+      "secondary": "#F3F4F6",
+      "secondary_foreground": "#1F2937",
+      "border": "#E5E7EB",
+      "input": "#F9FAFB",
+      "ring": "#2563EB",
+      "destructive": "#EF4444"
+    },
+    "usage": {
+      "body_bg": "bg-white",
+      "text_main": "text-neutral-950",
+      "text_muted": "text-neutral-500",
+      "border_subtle": "border-neutral-200",
+      "border_active": "border-blue-600",
+      "action_primary": "bg-blue-600 hover:bg-blue-700 text-white"
+    }
+  },
+  "layout": {
+    "structure": "Centered Single Column",
+    "container": "max-w-3xl mx-auto px-6 py-12 md:py-20",
+    "spacing": {
+      "section_gap": "gap-12",
+      "element_gap": "gap-6",
+      "internal_padding": "p-8 md:p-12"
+    },
+    "grid": {
+      "file_list": "grid grid-cols-2 md:grid-cols-4 gap-4"
+    }
+  },
+  "components": {
+    "DropZone": {
+      "style": "border-2 border-dashed border-neutral-200 rounded-xl bg-neutral-50/50 transition-colors duration-200 ease-out hover:border-blue-400 hover:bg-blue-50/30",
+      "active_state": "border-blue-600 bg-blue-50",
+      "texture_url": "https://images.unsplash.com/photo-1737276745810-ce753d468a34?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "instruction": "Use the texture_url as a subtle background image with extremely low opacity (0.03) on the drop zone to give it a paper feel."
+    },
+    "Button": {
+      "primary": "h-12 px-8 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md",
+      "secondary": "h-12 px-8 rounded-lg bg-white border border-neutral-200 text-neutral-900 hover:bg-neutral-50 transition-colors",
+      "icon_only": "h-8 w-8 p-0 rounded-full hover:bg-neutral-100 text-neutral-500 hover:text-red-600 transition-colors"
+    },
+    "FileCard": {
+      "style": "relative group aspect-[3/4] rounded-lg border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-all",
+      "image": "object-cover w-full h-full",
+      "overlay": "absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors",
+      "remove_btn": "absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 hover:bg-red-50 text-neutral-500 hover:text-red-600 rounded-full p-1.5 shadow-sm"
+    }
+  },
+  "visual_enhancers": {
+    "shadows": {
+      "card": "shadow-[0_2px_8px_rgba(0,0,0,0.04)]",
+      "float": "shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
+    },
+    "borders": {
+      "default": "border border-neutral-200",
+      "focus": "ring-2 ring-blue-600 ring-offset-2"
+    },
+    "textures": "Use subtle noise or grain if possible, but keep it minimal."
+  },
+  "motion": {
+    "philosophy": "Invisible Utility. No decoration. Only feedback.",
+    "transitions": "transition-all duration-200 ease-out",
+    "hover": "transform hover:-translate-y-0.5"
+  },
+  "accessibility": {
+    "contrast": "Ensure text is #0A0A0A on #FFFFFF. Muted text must be #6B7280 or darker.",
+    "focus": "Visible focus rings on all interactive elements.",
+    "aria": "All drag zones and buttons must have aria-labels."
+  },
+  "assets": {
+    "icons": "Use lucide-react. Icons: UploadCloud, FileImage, X, FileDown, Loader2",
+    "images": [
+      {
+        "category": "texture",
+        "url": "https://images.unsplash.com/photo-1737276745810-ce753d468a34?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "description": "Subtle white paper texture for dropzone background"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "1. Implement the 'DropZone' as the central hero element.",
+    "2. Use the 'texture_url' as a background-image for the DropZone with opacity-5 to create a tactile paper feel.",
+    "3. Ensure the 'Convert to PDF' button is prominent and only active when files are present.",
+    "4. The file list should look like a grid of polaroids or contact sheets.",
+    "5. STRICTLY NO DECORATIVE ANIMATIONS. Only hover states and loading spinners.",
+    "6. Use 'sonner' for success/error toasts.",
+    "7. Ensure mobile responsiveness: DropZone becomes smaller, Grid becomes 2 columns.",
+    "8. Add 'data-testid' to all interactive elements."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Do not use generic centered layouts; use the 'Swiss Utility' grid.",
+    "Create depth through subtle borders and ultra-soft shadows.",
+    "Use 'lucide-react' for icons.",
+    "Use 'sonner' for toasts.",
+    "NEVER use AI assistant emojis.",
+    "Export components as named exports.",
+    "Export pages as default exports."
+  ]
+}
