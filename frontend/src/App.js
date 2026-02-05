@@ -41,6 +41,10 @@ function App() {
   }, []);
 
   useEffect(() => {
+    document.title = "1 Minute Timer – Free Online 60 Second Countdown";
+  }, []);
+
+  useEffect(() => {
     if (!isRunning || timeLeft <= 0) {
       if (timeLeft === 0) {
         playBeep();
