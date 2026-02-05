@@ -1,34 +1,78 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+.timer-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.timer-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000000;
+  margin: 0 0 40px 0;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.timer-display {
+  font-size: 120px;
+  font-weight: 600;
+  color: #000000;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 40px;
 }
 
-.App-link {
-    color: #61dafb;
+.reset-button {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  padding: 16px 48px;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 60px;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.reset-button:hover {
+  background-color: #333333;
+}
+
+.reset-button:active {
+  background-color: #000000;
+  transform: scale(0.98);
+}
+
+.advertisement-box {
+  width: 100%;
+  max-width: 728px;
+  height: 90px;
+  border: 2px dashed #cccccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+}
+
+.advertisement-label {
+  font-size: 14px;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 600px) {
+  .timer-display {
+    font-size: 72px;
+  }
+  
+  .advertisement-box {
+    height: 60px;
+    max-width: 320px;
+  }
 }
