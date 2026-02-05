@@ -81,12 +81,17 @@ export default function Login() {
                 {loading ? 'Signing in...' : 'Sign in'}
               </Button>
             </form>
-            <p className="text-center text-sm text-gray-600 mt-6" data-testid="signup-link-text">
-              Don't have an account?{' '}
-              <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-medium" data-testid="signup-link">
-                Sign up
+            <div className="text-center mt-6 space-y-2">
+              <Link to="/forgot-password" className="block text-sm text-gray-500 hover:text-blue-600" data-testid="forgot-link">
+                Forgot your password?
               </Link>
-            </p>
+              <p className="text-sm text-gray-600" data-testid="signup-link-text">
+                Don't have an account?{' '}
+                <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-medium" data-testid="signup-link">
+                  Sign up
+                </Link>
+              </p>
+            </div>
           </CardContent>
         </Card>
       </main>
