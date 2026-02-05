@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext(null);
-
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export function AuthProvider({ children }) {
@@ -57,12 +56,18 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const refreshUser = async () => {
+    if (token) {
+      await fetchUser();
+    }
+  };
+
   const getAuthHeader = () => {
     return token ? { Authorization: `Bearer ${token}` } : {};
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, token, getAuthHeader }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, token, getAuthHeader, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
