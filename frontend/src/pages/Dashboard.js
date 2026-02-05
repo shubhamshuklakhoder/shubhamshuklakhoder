@@ -5,24 +5,27 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Separator } from '../components/ui/separator';
 import { toast } from 'sonner';
 import axios from 'axios';
-import { User, FileText, Link as LinkIcon, MessageCircle, LogOut, Plus, Trash2, ExternalLink, Copy, Check, Upload } from 'lucide-react';
+import { User, FileText, Link as LinkIcon, MessageCircle, LogOut, Plus, Trash2, ExternalLink, Copy, Check, Upload, Camera, AlertCircle } from 'lucide-react';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export default function Dashboard() {
-  const { user, logout, getAuthHeader, loading: authLoading } = useAuth();
+  const { user, logout, getAuthHeader, loading: authLoading, refreshUser } = useAuth();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const avatarInputRef = useRef(null);
   
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [resendingVerification, setResendingVerification] = useState(false);
   
   const [name, setName] = useState('');
   const [title, setTitle] = useState('');
@@ -70,14 +73,7 @@ export default function Dashboard() {
     }
     setSaving(true);
     try {
-      const updateData = {
-        name: name,
-        title: title || null,
-        bio: bio || null,
-        username: username || null,
-        whatsapp: whatsapp || null,
-        portfolio_links: portfolioLinks
-      };
+      const updateData = { name, title: title || null, bio: bio || null, username: username || null, whatsapp: whatsapp || null, portfolio_links: portfolioLinks };
       if (resumeType === 'link') {
         updateData.resume_url = resumeUrl || null;
         updateData.resume_type = resumeUrl ? 'link' : null;
@@ -95,21 +91,13 @@ export default function Dashboard() {
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (!file.name.toLowerCase().endsWith('.pdf')) {
-      toast.error('Only PDF files allowed');
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Max 5MB allowed');
-      return;
-    }
+    if (!file.name.toLowerCase().endsWith('.pdf')) { toast.error('Only PDF files allowed'); return; }
+    if (file.size > 5 * 1024 * 1024) { toast.error('Max 5MB allowed'); return; }
     setUploading(true);
     const formData = new FormData();
     formData.append('file', file);
     try {
-      const response = await axios.post(`${API_URL}/profile/resume`, formData, {
-        headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' }
-      });
+      const response = await axios.post(`${API_URL}/profile/resume`, formData, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } });
       setResumeType('upload');
       setResumeUrl('');
       setProfile(prev => ({ ...prev, resume_url: response.data.resume_url, resume_type: 'upload' }));
@@ -121,31 +109,50 @@ export default function Dashboard() {
     }
   };
 
-  const addLink = () => {
-    if (!newLinkTitle.trim() || !newLinkUrl.trim()) {
-      toast.error('Fill both fields');
-      return;
-    }
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) { toast.error('Only JPEG, PNG, WebP, GIF allowed'); return; }
+    if (file.size > 2 * 1024 * 1024) { toast.error('Max 2MB allowed'); return; }
+    setUploadingAvatar(true);
+    const formData = new FormData();
+    formData.append('file', file);
     try {
-      new URL(newLinkUrl);
-    } catch {
-      toast.error('Invalid URL');
-      return;
+      const response = await axios.post(`${API_URL}/profile/avatar`, formData, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } });
+      setProfile(prev => ({ ...prev, avatar_url: response.data.avatar_url }));
+      toast.success('Avatar uploaded!');
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Upload failed');
+    } finally {
+      setUploadingAvatar(false);
     }
+  };
+
+  const resendVerification = async () => {
+    setResendingVerification(true);
+    try {
+      await axios.post(`${API_URL}/auth/resend-verification`, { email: user.email });
+      toast.success('Verification email sent!');
+    } catch (error) {
+      toast.error('Failed to send verification email');
+    } finally {
+      setResendingVerification(false);
+    }
+  };
+
+  const addLink = () => {
+    if (!newLinkTitle.trim() || !newLinkUrl.trim()) { toast.error('Fill both fields'); return; }
+    try { new URL(newLinkUrl); } catch { toast.error('Invalid URL'); return; }
     setPortfolioLinks([...portfolioLinks, { id: crypto.randomUUID(), title: newLinkTitle, url: newLinkUrl }]);
     setNewLinkTitle('');
     setNewLinkUrl('');
   };
 
-  const removeLink = (id) => {
-    setPortfolioLinks(portfolioLinks.filter(l => l.id !== id));
-  };
+  const removeLink = (id) => setPortfolioLinks(portfolioLinks.filter(l => l.id !== id));
 
   const copyLink = () => {
-    if (!profile?.username) {
-      toast.error('Set username first');
-      return;
-    }
+    if (!profile?.username) { toast.error('Set username first'); return; }
     navigator.clipboard.writeText(`${window.location.origin}/${profile.username}`);
     setCopied(true);
     toast.success('Copied!');
@@ -175,6 +182,25 @@ export default function Dashboard() {
       </header>
 
       <main className="max-w-3xl mx-auto px-4 py-8">
+        {/* Verification Banner */}
+        {user && !user.is_verified && (
+          <Card className="mb-6 border-yellow-300 bg-yellow-50" data-testid="verification-banner">
+            <CardContent className="py-4">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-yellow-800 font-medium">Verify your email</p>
+                  <p className="text-yellow-700 text-sm">Check your inbox for a verification link, or click below to resend.</p>
+                </div>
+                <Button variant="outline" size="sm" onClick={resendVerification} disabled={resendingVerification} className="border-yellow-400 text-yellow-800 hover:bg-yellow-100" data-testid="resend-verification-btn">
+                  {resendingVerification ? 'Sending...' : 'Resend'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Profile Link Card */}
         {profile?.username && (
           <Card className="mb-6 border-blue-200 bg-blue-50" data-testid="profile-link-card">
             <CardContent className="py-4">
@@ -191,11 +217,35 @@ export default function Dashboard() {
           </Card>
         )}
 
+        {/* Avatar + Basic Info */}
         <Card className="mb-6" data-testid="basic-info-card">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-xl"><User className="w-5 h-5" />Basic Information</CardTitle>
+            <CardTitle className="flex items-center gap-2 text-xl"><User className="w-5 h-5" />Profile</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
+            {/* Avatar Upload */}
+            <div className="flex items-center gap-6">
+              <div className="relative">
+                <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden" data-testid="avatar-preview">
+                  {profile?.avatar_url ? (
+                    <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-blue-600 text-2xl font-bold">{name?.charAt(0)?.toUpperCase() || 'U'}</span>
+                  )}
+                </div>
+                <input type="file" ref={avatarInputRef} onChange={handleAvatarUpload} accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" data-testid="avatar-input" />
+                <button onClick={() => avatarInputRef.current?.click()} disabled={uploadingAvatar} className="absolute -bottom-1 -right-1 w-8 h-8 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-md" data-testid="upload-avatar-btn">
+                  {uploadingAvatar ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Camera className="w-4 h-4" />}
+                </button>
+              </div>
+              <div>
+                <p className="font-medium text-gray-900">Profile Picture</p>
+                <p className="text-sm text-gray-500">JPEG, PNG, WebP or GIF. Max 2MB.</p>
+              </div>
+            </div>
+
+            <Separator />
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name *</Label>
