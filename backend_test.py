@@ -289,6 +289,104 @@ class JobLinkAPITester:
         
         return success
 
+    def test_avatar_upload(self):
+        """Test avatar image upload (mock JPEG)"""
+        print("\n" + "="*50)
+        print("TESTING AVATAR UPLOAD")
+        print("="*50)
+        
+        if not self.token:
+            print("❌ No token available for upload test")
+            return False
+            
+        # Create a minimal mock JPEG (1x1 pixel)
+        jpeg_content = bytes.fromhex('ffd8ffe000104a46494600010100000100010000ffc200110800010001010101110202020202ffc4001a0000000701010101000000000000000006070100020304050810ffda0008010100003f00ffd9')
+        
+        files = {
+            'file': ('test_avatar.jpg', jpeg_content, 'image/jpeg')
+        }
+        
+        success, response = self.run_test(
+            "Upload Avatar",
+            "POST",
+            "/profile/avatar",
+            200,
+            files=files
+        )
+        
+        return success
+
+    def test_forgot_password(self):
+        """Test forgot password flow"""
+        print("\n" + "="*50)
+        print("TESTING FORGOT PASSWORD")
+        print("="*50)
+        
+        success, response = self.run_test(
+            "Forgot Password Request",
+            "POST",
+            "/auth/forgot-password",
+            200,
+            data={"email": self.test_user_data["email"]}
+        )
+        
+        if success:
+            print("   Forgot password request processed (email would be sent)")
+        
+        return success
+
+    def test_resend_verification(self):
+        """Test resend verification email"""
+        print("\n" + "="*50)
+        print("TESTING RESEND VERIFICATION")
+        print("="*50)
+        
+        success, response = self.run_test(
+            "Resend Verification Email",
+            "POST",
+            "/auth/resend-verification",
+            200,
+            data={"email": self.test_user_data["email"]}
+        )
+        
+        if success:
+            print("   Verification email resend request processed")
+        
+        return success
+
+    def test_email_verification_invalid_token(self):
+        """Test email verification with invalid token"""
+        print("\n" + "="*50)
+        print("TESTING EMAIL VERIFICATION (INVALID TOKEN)")
+        print("="*50)
+        
+        # Test with invalid token - should return 400
+        success, response = self.run_test(
+            "Email Verification Invalid Token",
+            "POST",
+            "/auth/verify-email?token=invalid_token_123",
+            400
+        )
+        
+        return success
+
+    def test_reset_password_invalid_token(self):
+        """Test password reset with invalid token"""
+        print("\n" + "="*50)
+        print("TESTING RESET PASSWORD (INVALID TOKEN)")
+        print("="*50)
+        
+        # Test with invalid token - should return 400
+        success, response = self.run_test(
+            "Reset Password Invalid Token",
+            "POST",
+            "/auth/reset-password",
+            400,
+            data={"token": "invalid_token_123", "password": "NewPassword123!"}
+        )
+        
+        return success
+
     def run_all_tests(self):
         """Run all API tests"""
         print("🚀 Starting JobLink API Tests")
