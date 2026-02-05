@@ -418,6 +418,21 @@ class JobLinkAPITester:
         # Test resume upload
         self.test_resume_upload()
         
+        # Test avatar upload
+        self.test_avatar_upload()
+        
+        # Test forgot password
+        self.test_forgot_password()
+        
+        # Test resend verification
+        self.test_resend_verification()
+        
+        # Test email verification with invalid token
+        self.test_email_verification_invalid_token()
+        
+        # Test password reset with invalid token
+        self.test_reset_password_invalid_token()
+        
         return self.generate_report()
 
     def generate_report(self):
