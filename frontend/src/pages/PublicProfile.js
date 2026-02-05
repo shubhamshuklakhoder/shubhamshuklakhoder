@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import axios from 'axios';
 import { FileText, MessageCircle, ExternalLink, Mail } from 'lucide-react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
