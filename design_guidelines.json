@@ -1,0 +1,144 @@
+{
+  "design_system": {
+    "identity": {
+      "name": "JobLink",
+      "tone": "Professional, Efficient, Trustworthy, Minimalist",
+      "target_audience": "Job seekers in India, HR Professionals",
+      "theme_mode": "light",
+      "core_values": ["Speed", "Clarity", "Professionalism"]
+    },
+    "typography": {
+      "font_family": {
+        "headings": "Work Sans, sans-serif",
+        "body": "Inter, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "scale": {
+        "h1": "text-4xl md:text-5xl font-bold tracking-tight leading-tight",
+        "h2": "text-3xl font-semibold tracking-tight",
+        "h3": "text-2xl font-semibold",
+        "h4": "text-xl font-medium",
+        "body_lg": "text-lg leading-relaxed text-gray-700",
+        "body_base": "text-base leading-relaxed text-gray-600",
+        "body_sm": "text-sm text-gray-500",
+        "caption": "text-xs text-gray-400 uppercase tracking-wider"
+      },
+      "imports": [
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Work+Sans:wght@500;600;700&display=swap"
+      ]
+    },
+    "colors": {
+      "palette": {
+        "brand": {
+          "primary": "#2563EB",
+          "primary_hover": "#1D4ED8",
+          "secondary": "#EFF6FF",
+          "accent": "#3B82F6"
+        },
+        "neutral": {
+          "bg_app": "#F9FAFB",
+          "bg_card": "#FFFFFF",
+          "text_main": "#111827",
+          "text_secondary": "#4B5563",
+          "text_muted": "#9CA3AF",
+          "border": "#E5E7EB",
+          "border_focus": "#2563EB"
+        },
+        "status": {
+          "success": "#10B981",
+          "error": "#EF4444",
+          "warning": "#F59E0B"
+        }
+      },
+      "usage": {
+        "background": "bg-gray-50",
+        "card": "bg-white border border-gray-200 shadow-sm",
+        "primary_button": "bg-blue-600 hover:bg-blue-700 text-white shadow-sm",
+        "secondary_button": "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50",
+        "ghost_button": "hover:bg-gray-100 text-gray-600",
+        "link": "text-blue-600 hover:text-blue-800 underline-offset-4 hover:underline"
+      }
+    },
+    "layout": {
+      "spacing": {
+        "container_padding": "p-4 md:p-8",
+        "section_gap": "gap-8 md:gap-12",
+        "component_gap": "gap-4"
+      },
+      "containers": {
+        "public_profile": "max-w-md mx-auto w-full min-h-screen bg-white shadow-sm md:my-8 md:rounded-xl md:border md:border-gray-200",
+        "dashboard_main": "flex-1 p-6 md:p-10 max-w-5xl mx-auto w-full",
+        "auth_card": "max-w-[400px] mx-auto w-full"
+      },
+      "grid_patterns": {
+        "dashboard_stats": "grid grid-cols-1 md:grid-cols-3 gap-6",
+        "form_layout": "grid grid-cols-1 gap-6 max-w-2xl"
+      }
+    },
+    "components": {
+      "buttons": {
+        "style": "rounded-md font-medium transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-1",
+        "sizing": {
+          "sm": "h-8 px-3 text-sm",
+          "default": "h-10 px-4 py-2",
+          "lg": "h-12 px-8 text-lg"
+        }
+      },
+      "inputs": {
+        "style": "flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50"
+      },
+      "cards": {
+        "style": "rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm"
+      },
+      "navigation": {
+        "sidebar": "w-64 border-r border-gray-200 bg-white h-screen fixed left-0 top-0 hidden md:block",
+        "mobile_nav": "md:hidden fixed bottom-0 left-0 right-0 border-t bg-white h-16 flex items-center justify-around z-50"
+      }
+    },
+    "assets": {
+      "icons": {
+        "library": "lucide-react",
+        "style": "stroke-width={1.5} className='w-5 h-5'"
+      },
+      "images": {
+        "hero_professional": "https://images.unsplash.com/photo-1762341113148-41a938d2e957?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBwcm9mZXNzaW9uYWwlMjBoYXBweSUyMG9mZmljZXxlbnwwfHx8fDE3NzAyNzQyNjd8MA&ixlib=rb-4.1.0&q=85",
+        "workspace_minimal": "https://images.unsplash.com/photo-1752223638233-4c9545333f89?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDV8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwd2hpdGUlMjBkZXNrJTIwd29ya3NwYWNlfGVufDB8fHx8MTc3MDI3NDI2N3ww&ixlib=rb-4.1.0&q=85"
+      }
+    },
+    "motion": {
+      "policy": "minimal",
+      "allowed": [
+        "hover:bg-blue-700",
+        "hover:text-blue-800",
+        "focus:ring-2"
+      ],
+      "forbidden": [
+        "animate-spin (except loading)",
+        "framer-motion (unless absolutely necessary for layout shifts)",
+        "parallax",
+        "scroll-trigger"
+      ]
+    },
+    "accessibility": {
+      "contrast_check": "Ensure text is #4B5563 or darker on white backgrounds.",
+      "focus_states": "Visible focus rings (blue-500) are mandatory for keyboard navigation.",
+      "semantic_html": "Use <main>, <nav>, <header>, <footer>, <section> tags."
+    }
+  },
+  "instructions_to_main_agent": [
+    "1. THEME SETUP: Ensure tailwind.config.js uses the specified font families (Work Sans for headings, Inter for body).",
+    "2. PUBLIC PROFILE (/username): This is the core feature. It must load instantly. Use a 'Container' pattern: <main className='max-w-md mx-auto min-h-screen bg-white md:border md:shadow-sm md:my-10 md:rounded-xl overflow-hidden'>. Inside, stack elements vertically: Avatar (centered, large), Name (H1), Title (H3 muted), Bio, Resume Button (Primary), WhatsApp Button (Secondary, Green-600), Portfolio Links (List items).",
+    "3. DASHBOARD: Use a clean Sidebar layout. Sidebar on desktop, Bottom Nav on mobile. Content area should be spacious (p-6). Use 'Card' components for sections like 'Edit Profile', 'Manage Links'.",
+    "4. FORMS: Split long forms into sections with headers. Don't use one giant form. Use clear labels.",
+    "5. LANDING PAGE: Keep it simple. Hero: 'Your Professional Bio in One Link'. CTA: 'Create Your Link'. Image: Use 'hero_professional' image on the right or as a subtle background. Features: 'Clean Design', 'Fast Loading', 'Resume Hosting'.",
+    "6. COMPONENT REUSE: Use Shadcn UI for standard elements (Buttons, Inputs, Dialogs, Dropdowns). Do not reinvent the wheel.",
+    "7. PERFORMANCE: Avoid large layout shifts. Optimize images."
+  ],
+  "universal_guidelines": [
+    "Do not use gradients for backgrounds.",
+    "Do not use dark mode by default, strictly Light Mode as requested.",
+    "Use data-testid on all interactive elements.",
+    "Ensure mobile responsiveness is tested first.",
+    "Use 'lucide-react' for all icons."
+  ]
+}
