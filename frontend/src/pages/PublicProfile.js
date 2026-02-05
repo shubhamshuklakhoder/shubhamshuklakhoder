@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import axios from 'axios';
 import { FileText, MessageCircle, ExternalLink, Mail } from 'lucide-react';
+import { Helmet } from 'react-helmet';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -50,13 +51,40 @@ export default function PublicProfile() {
     );
   }
 
+  const profileUrl = `${window.location.origin}/${username}`;
+  const ogImage = profile.avatar_url && !profile.avatar_url.startsWith('data:') ? profile.avatar_url : `${window.location.origin}/og-default.png`;
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* OpenGraph Meta Tags */}
+      <Helmet>
+        <title>{profile.name} - JobLink</title>
+        <meta name="description" content={profile.bio || `${profile.name}'s professional profile on JobLink`} />
+        
+        {/* OpenGraph */}
+        <meta property="og:type" content="profile" />
+        <meta property="og:title" content={`${profile.name}${profile.title ? ` - ${profile.title}` : ''}`} />
+        <meta property="og:description" content={profile.bio || `View ${profile.name}'s professional profile, resume, and portfolio on JobLink`} />
+        <meta property="og:url" content={profileUrl} />
+        <meta property="og:site_name" content="JobLink" />
+        {profile.avatar_url && <meta property="og:image" content={profile.avatar_url} />}
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={`${profile.name}${profile.title ? ` - ${profile.title}` : ''}`} />
+        <meta name="twitter:description" content={profile.bio || `View ${profile.name}'s professional profile on JobLink`} />
+        {profile.avatar_url && <meta name="twitter:image" content={profile.avatar_url} />}
+      </Helmet>
+
       <main className="max-w-md mx-auto min-h-screen bg-white md:my-8 md:rounded-xl md:border md:border-gray-200 md:shadow-sm md:min-h-0">
         <div className="p-6 md:p-8" data-testid="public-profile">
           <div className="flex justify-center mb-6">
-            <div className="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-3xl font-bold" data-testid="profile-avatar">
-              {profile.name?.charAt(0).toUpperCase()}
+            <div className="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden" data-testid="profile-avatar">
+              {profile.avatar_url ? (
+                <img src={profile.avatar_url} alt={profile.name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-blue-600 text-3xl font-bold">{profile.name?.charAt(0).toUpperCase()}</span>
+              )}
             </div>
           </div>
           <div className="text-center mb-6">
