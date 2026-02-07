@@ -266,13 +266,55 @@ export default function App() {
           )}
         </div>
 
-        {/* Footer */}
-        <footer className="mt-16 text-center">
+        {/* Security Note */}
+        <div className="mt-16 text-center">
           <p className="text-xs text-neutral-400">
             Files are processed securely and automatically deleted after conversion.
           </p>
-        </footer>
+        </div>
       </div>
+
+      {/* Bottom Section */}
+      <section 
+        data-testid="explore-section"
+        className="w-full border-t border-neutral-200 bg-white"
+      >
+        <div className="h-[50px] md:h-[100px] flex items-center justify-center px-6">
+          <p className="text-sm md:text-base text-neutral-500 text-center">
+            Explore more simple and secure document tools designed to save time.
+          </p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer 
+        data-testid="footer"
+        className="w-full border-t border-neutral-100 bg-white py-6"
+      >
+        <div className="max-w-3xl mx-auto px-6 flex flex-wrap items-center justify-center gap-6">
+          <a 
+            href="/privacy" 
+            data-testid="privacy-link"
+            className="text-sm text-neutral-500 hover:text-neutral-950 transition-colors"
+          >
+            Privacy Policy
+          </a>
+          <a 
+            href="/terms" 
+            data-testid="terms-link"
+            className="text-sm text-neutral-500 hover:text-neutral-950 transition-colors"
+          >
+            Terms of Use
+          </a>
+          <a 
+            href="/about" 
+            data-testid="about-link"
+            className="text-sm text-neutral-500 hover:text-neutral-950 transition-colors"
+          >
+            About
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }
