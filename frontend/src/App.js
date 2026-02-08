@@ -4,6 +4,10 @@ import axios from "axios";
 import { Toaster, toast } from "sonner";
 import { UploadCloud, FileImage, X, FileDown, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsOfUse from "@/pages/TermsOfUse";
+import About from "@/pages/About";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -11,7 +15,7 @@ const API = `${BACKEND_URL}/api`;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_FILES = 20;
 
-export default function App() {
+const HomePage = () => {
   const [files, setFiles] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
@@ -38,7 +42,6 @@ export default function App() {
       return combined;
     });
     
-    // Clear PDF when new files added
     setPdfBlob(null);
   }, []);
 
@@ -118,161 +121,163 @@ export default function App() {
   }, [pdfBlob]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <Toaster position="top-center" richColors />
       
-      <div className="max-w-3xl mx-auto px-6 py-12 md:py-20">
-        {/* Header */}
-        <header className="text-center mb-12">
-          <h1 
-            data-testid="page-title"
-            className="text-4xl md:text-5xl font-semibold text-neutral-950 tracking-tight"
+      <main className="flex-grow">
+        <div className="max-w-3xl mx-auto px-6 py-12 md:py-20">
+          {/* Header */}
+          <header className="text-center mb-12">
+            <h1 
+              data-testid="page-title"
+              className="text-4xl md:text-5xl font-semibold text-neutral-950 tracking-tight"
+            >
+              Image to PDF Converter
+            </h1>
+            <p className="mt-4 text-base text-neutral-500">
+              Convert images into a single PDF in seconds. No signup required.
+            </p>
+          </header>
+
+          {/* Drop Zone */}
+          <div
+            data-testid="drop-zone"
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            onClick={() => fileInputRef.current?.click()}
+            className={`
+              relative cursor-pointer
+              border-2 border-dashed rounded-xl
+              p-8 md:p-12
+              flex flex-col items-center justify-center
+              min-h-[200px]
+              transition-colors duration-200 ease-out
+              ${isDragging 
+                ? "border-blue-600 bg-blue-50" 
+                : "border-neutral-200 bg-neutral-50/50 hover:border-blue-400 hover:bg-blue-50/30"
+              }
+            `}
+            role="button"
+            aria-label="Upload images"
           >
-            Image to PDF Converter
-          </h1>
-          <p className="mt-4 text-base text-neutral-500">
-            Convert images into a single PDF in seconds. No signup required.
-          </p>
-        </header>
-
-        {/* Drop Zone */}
-        <div
-          data-testid="drop-zone"
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
-          className={`
-            relative cursor-pointer
-            border-2 border-dashed rounded-xl
-            p-8 md:p-12
-            flex flex-col items-center justify-center
-            min-h-[200px]
-            transition-colors duration-200 ease-out
-            ${isDragging 
-              ? "border-blue-600 bg-blue-50" 
-              : "border-neutral-200 bg-neutral-50/50 hover:border-blue-400 hover:bg-blue-50/30"
-            }
-          `}
-          role="button"
-          aria-label="Upload images"
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            accept=".jpg,.jpeg,.png,.webp"
-            onChange={handleFileInput}
-            className="hidden"
-            data-testid="file-input"
-          />
-          
-          <UploadCloud 
-            className={`w-12 h-12 mb-4 ${isDragging ? "text-blue-600" : "text-neutral-400"}`} 
-          />
-          <p className="text-neutral-950 font-medium text-center">
-            Drag and drop images here
-          </p>
-          <p className="text-neutral-500 text-sm mt-1">
-            or click to browse
-          </p>
-          <p className="text-neutral-400 text-xs mt-3">
-            JPG, PNG, WEBP • Up to {MAX_FILES} images
-          </p>
-        </div>
-
-        {/* File List */}
-        {files.length > 0 && (
-          <div className="mt-8">
-            <div className="flex items-center justify-between mb-4">
-              <p 
-                data-testid="file-count"
-                className="text-sm text-neutral-500"
-              >
-                {files.length} {files.length === 1 ? "image" : "images"} selected
-              </p>
-              <button
-                data-testid="clear-all-btn"
-                onClick={clearAll}
-                className="text-sm text-neutral-500 hover:text-red-600 transition-colors"
-              >
-                Clear all
-              </button>
-            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept=".jpg,.jpeg,.png,.webp"
+              onChange={handleFileInput}
+              className="hidden"
+              data-testid="file-input"
+            />
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {files.map((file, index) => (
-                <div
-                  key={`${file.name}-${index}`}
-                  data-testid={`file-card-${index}`}
-                  className="relative group aspect-[3/4] rounded-lg border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-all"
-                >
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={file.name}
-                    className="object-cover w-full h-full"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors" />
-                  <button
-                    data-testid={`remove-file-${index}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeFile(index);
-                    }}
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 hover:bg-red-50 text-neutral-500 hover:text-red-600 rounded-full p-1.5 shadow-sm"
-                    aria-label={`Remove ${file.name}`}
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
-                    <p className="text-white text-xs truncate">{file.name}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <UploadCloud 
+              className={`w-12 h-12 mb-4 ${isDragging ? "text-blue-600" : "text-neutral-400"}`} 
+            />
+            <p className="text-neutral-950 font-medium text-center">
+              Drag and drop images here
+            </p>
+            <p className="text-neutral-500 text-sm mt-1">
+              or click to browse
+            </p>
+            <p className="text-neutral-400 text-xs mt-3">
+              JPG, PNG, WEBP • Up to {MAX_FILES} images
+            </p>
           </div>
-        )}
 
-        {/* Action Buttons */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-          {!pdfBlob ? (
-            <Button
-              data-testid="convert-btn"
-              onClick={convertToPdf}
-              disabled={files.length === 0 || isConverting}
-              className="h-12 px-8 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isConverting ? (
-                <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Converting...
-                </>
-              ) : (
-                <>
-                  <FileImage className="w-5 h-5 mr-2" />
-                  Convert to PDF
-                </>
-              )}
-            </Button>
-          ) : (
-            <Button
-              data-testid="download-btn"
-              onClick={downloadPdf}
-              className="h-12 px-8 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md"
-            >
-              <FileDown className="w-5 h-5 mr-2" />
-              Download PDF
-            </Button>
+          {/* File List */}
+          {files.length > 0 && (
+            <div className="mt-8">
+              <div className="flex items-center justify-between mb-4">
+                <p 
+                  data-testid="file-count"
+                  className="text-sm text-neutral-500"
+                >
+                  {files.length} {files.length === 1 ? "image" : "images"} selected
+                </p>
+                <button
+                  data-testid="clear-all-btn"
+                  onClick={clearAll}
+                  className="text-sm text-neutral-500 hover:text-red-600 transition-colors"
+                >
+                  Clear all
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {files.map((file, index) => (
+                  <div
+                    key={`${file.name}-${index}`}
+                    data-testid={`file-card-${index}`}
+                    className="relative group aspect-[3/4] rounded-lg border border-neutral-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-all"
+                  >
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={file.name}
+                      className="object-cover w-full h-full"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors" />
+                    <button
+                      data-testid={`remove-file-${index}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeFile(index);
+                      }}
+                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 hover:bg-red-50 text-neutral-500 hover:text-red-600 rounded-full p-1.5 shadow-sm"
+                      aria-label={`Remove ${file.name}`}
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                      <p className="text-white text-xs truncate">{file.name}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
-        </div>
 
-        {/* Security Note */}
-        <div className="mt-16 text-center">
-          <p className="text-xs text-neutral-400">
-            Files are processed securely and automatically deleted after conversion.
-          </p>
+          {/* Action Buttons */}
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            {!pdfBlob ? (
+              <Button
+                data-testid="convert-btn"
+                onClick={convertToPdf}
+                disabled={files.length === 0 || isConverting}
+                className="h-12 px-8 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isConverting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Converting...
+                  </>
+                ) : (
+                  <>
+                    <FileImage className="w-5 h-5 mr-2" />
+                    Convert to PDF
+                  </>
+                )}
+              </Button>
+            ) : (
+              <Button
+                data-testid="download-btn"
+                onClick={downloadPdf}
+                className="h-12 px-8 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md"
+              >
+                <FileDown className="w-5 h-5 mr-2" />
+                Download PDF
+              </Button>
+            )}
+          </div>
+
+          {/* Security Note */}
+          <div className="mt-16 text-center">
+            <p className="text-xs text-neutral-400">
+              Files are processed securely and automatically deleted after conversion.
+            </p>
+          </div>
         </div>
-      </div>
+      </main>
 
       {/* Bottom Section */}
       <section 
@@ -292,27 +297,27 @@ export default function App() {
         className="w-full border-t border-neutral-100 bg-white py-6"
       >
         <div className="max-w-3xl mx-auto px-6 flex flex-wrap items-center justify-center gap-6">
-          <a 
-            href="/privacy" 
+          <Link 
+            to="/privacy-policy" 
             data-testid="privacy-link"
             className="text-sm text-neutral-500 hover:text-neutral-950 transition-colors"
           >
             Privacy Policy
-          </a>
-          <a 
-            href="/terms" 
+          </Link>
+          <Link 
+            to="/terms" 
             data-testid="terms-link"
             className="text-sm text-neutral-500 hover:text-neutral-950 transition-colors"
           >
             Terms of Use
-          </a>
-          <a 
-            href="/about" 
+          </Link>
+          <Link 
+            to="/about" 
             data-testid="about-link"
             className="text-sm text-neutral-500 hover:text-neutral-950 transition-colors"
           >
             About
-          </a>
+          </Link>
         </div>
         <p 
           data-testid="footer-credit"
@@ -322,5 +327,18 @@ export default function App() {
         </p>
       </footer>
     </div>
+  );
+};
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfUse />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
