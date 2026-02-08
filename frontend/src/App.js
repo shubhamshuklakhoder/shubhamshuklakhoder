@@ -314,6 +314,12 @@ export default function App() {
             About
           </a>
         </div>
+        <p 
+          data-testid="footer-credit"
+          className="text-xs text-neutral-300 text-center mt-4"
+        >
+          A Shubham Shukla Production
+        </p>
       </footer>
     </div>
   );
